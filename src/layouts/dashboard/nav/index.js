@@ -22,7 +22,6 @@ Nav.propTypes = {
 };
 
 export default function Nav({ openNav, onCloseNav }) {
-
   const isDesktop = useResponsive('up', 'lg');
 
   const renderContent = (
@@ -32,17 +31,15 @@ export default function Nav({ openNav, onCloseNav }) {
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-
-<Container maxWidth="xl">
+      <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5, pt: 5 }}>
           Valordash
         </Typography>
-        </Container>
+      </Container>
 
       <NavSection data={navConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
-      
     </Scrollbar>
   );
 

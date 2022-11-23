@@ -11,11 +11,13 @@ export default function AppWidgetSummary({ name, color = 'primary', sx, ...other
   return (
     <Card
       sx={{
+        borderColor: '#73f9f9',
+        borderWidth: '3px',
         py: 4,
         boxShadow: 0,
         textAlign: 'center',
-        color: (theme) => theme.palette[color].darker,
-        bgcolor: (theme) => theme.palette.background.red,
+        color: (theme) => theme.palette[color].lighter,
+        bgcolor: (theme) => theme.palette.background.blue,
         ...sx,
       }}
       {...other}

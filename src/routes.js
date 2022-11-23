@@ -9,6 +9,7 @@ import SpraysPage from './pages/SpraysPage';
 import PlayerTitlesPage from './pages/PlayerTitlesPage';
 import WeaponsPage from './pages/WeaponsPage';
 import ContentTiersPage from './pages/ContentTiersPage';
+import SinglePageLayout from './layouts/dashboard/SinglePageLayout';
 
 export default function Router() {
   const routes = useRoutes([
@@ -21,7 +22,7 @@ export default function Router() {
       ],
     },
     {
-      element: <DashboardLayout />,
+      element: <SinglePageLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'buddies', element: <BuddiesPage /> },

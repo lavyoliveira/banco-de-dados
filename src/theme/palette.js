@@ -40,7 +40,6 @@ const INFO = {
   contrastText: '#fff',
 };
 
-
 const palette = {
   common: { black: '#000', white: '#fff' },
   primary: PRIMARY,
@@ -57,7 +56,7 @@ const palette = {
     paper: '#fff',
     default: '#161616',
     neutral: GREY[200],
-    red: '#ffc4c1',
+    blue: '#043c44',
   },
   action: {
     active: GREY[600],
