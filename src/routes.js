@@ -10,6 +10,7 @@ import PlayerTitlesPage from './pages/PlayerTitlesPage';
 import WeaponsPage from './pages/WeaponsPage';
 import ContentTiersPage from './pages/ContentTiersPage';
 import SinglePageLayout from './layouts/dashboard/SinglePageLayout';
+import SkinsPage from './pages/SkinsPage';
 
 export default function Router() {
   const routes = useRoutes([
@@ -32,6 +33,7 @@ export default function Router() {
         { path: 'titles', element: <PlayerTitlesPage /> },
         { path: 'weapons', element: <WeaponsPage /> },
         { path: 'content-tiers', element: <ContentTiersPage /> },
+        { path: 'skins', element: <SkinsPage /> },
       ],
     },
   ]);
