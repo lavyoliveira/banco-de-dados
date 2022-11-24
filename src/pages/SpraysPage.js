@@ -1,8 +1,27 @@
 import { Helmet } from 'react-helmet-async';
 import { Grid, Container, Typography } from '@mui/material';
-import {
-  AppWidgetSummary,
-} from '../sections/@dashboard/app';
+import { SprayWidgetSummary } from '../sections/@dashboard/app';
+
+const mock = [
+  {
+      "id": "3d2bcfc5-442b-812e-3c08-9180d6b36077",
+      "id_bundle": "ed453815-44aa-4c4d-f3aa-77b4bcf048d7",
+      "name": "Caught on Camera Spray",
+      "category": "",
+      "theme": "Glitchpop",
+      "icon": "https://media.valorant-api.com/sprays/3d2bcfc5-442b-812e-3c08-9180d6b36077/",
+      "animation": ""
+  },
+  {
+      "id": "81c68821-46d3-9176-294c-abba0bc64e0b",
+      "id_bundle": "ed453815-44aa-4c4d-f3aa-77b4bcf048d7",
+      "name": "Chicken Out Spray",
+      "category": "",
+      "theme": "Glitchpop",
+      "icon": "https://media.valorant-api.com/sprays/81c68821-46d3-9176-294c-abba0bc64e0b/",
+      "animation": ""
+  }
+]
 
 export default function BuddiesPage() {
 
@@ -17,21 +36,12 @@ export default function BuddiesPage() {
           Sprays
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={20} sm={6} md={3}>
-            <AppWidgetSummary name="Task Force 809 Buddy" icon="1" />
+        <Grid container spacing={2}>
+        {mock.map((spray) => (
+          <Grid item xs={24} sm={12} md={6} key={`randomKey${spray.id}`}>
+            <SprayWidgetSummary name={spray.name} image={spray.icon} theme={spray.theme}/>
           </Grid> 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="RGX 11z Pro Buddy" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Gaia's Vengeance Buddy" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Zedd Buddy" />
-          </Grid> 
+          ))}
         </Grid>
       </Container>
     </>
