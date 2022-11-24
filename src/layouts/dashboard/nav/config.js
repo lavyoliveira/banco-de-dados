@@ -38,6 +38,11 @@ const navConfig = [
     path: '/content-tiers',
     icon: icon('diamond'),
   },
+  {
+    title: 'Skins',
+    path: '/skins',
+    icon: icon('skin'),
+  },
 ];
 
 export default navConfig;
