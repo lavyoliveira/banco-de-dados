@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import { Card,  Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 
-AppWidgetSummary.propTypes = {
+SprayWidgetSummary.propTypes = {
   color: PropTypes.string,
   name: PropTypes.string.isRequired,
   sx: PropTypes.object,
   image: PropTypes.string,
 };
 
-export default function AppWidgetSummary({ name, image, theme, color = 'primary', sx, ...other }) {
+export default function SprayWidgetSummary({ name, image, theme, color = 'primary', sx, ...other }) {
   return (
     <Card
       sx={{

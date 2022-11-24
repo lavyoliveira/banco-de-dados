@@ -1,8 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Grid, Container, Typography } from '@mui/material';
-import {
-  AppWidgetSummary,
-} from '../sections/@dashboard/app';
+import { SprayWidgetSummary } from '../sections/@dashboard/app';
 
 const mock = [
   {
@@ -41,7 +39,7 @@ export default function BuddiesPage() {
         <Grid container spacing={2}>
         {mock.map((spray) => (
           <Grid item xs={24} sm={12} md={6} key={`randomKey${spray.id}`}>
-            <AppWidgetSummary name={spray.name} image={spray.icon} theme={spray.theme}/>
+            <SprayWidgetSummary name={spray.name} image={spray.icon} theme={spray.theme}/>
           </Grid> 
           ))}
         </Grid>
