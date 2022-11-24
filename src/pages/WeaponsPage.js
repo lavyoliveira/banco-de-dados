@@ -1,10 +1,34 @@
 import { Helmet } from 'react-helmet-async';
 import { Grid, Container, Typography } from '@mui/material';
-import { AppWidgetSummary } from '../sections/@dashboard/app';
+import WeaponWidgetSummary from '../sections/@dashboard/app/NameDescriptionWidgetSummary';
 
 const urlApi = 'http://localhost:3333/';
 
 const mock = [
+  {
+    id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
+    name: 'Odin',
+    category: 'Heavy Weapons',
+    icon: 'https://media.valorant-api.com/weapons/63e6c2b6-4a8e-869c-3d4c-e38355226584/',
+  },
+  {
+    id: '55d8a0f4-4274-ca67-fe2c-06ab45efdf58',
+    name: 'Ares',
+    category: 'Heavy Weapons',
+    icon: 'https://media.valorant-api.com/weapons/55d8a0f4-4274-ca67-fe2c-06ab45efdf58/',
+  },
+  {
+    id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
+    name: 'Odin',
+    category: 'Heavy Weapons',
+    icon: 'https://media.valorant-api.com/weapons/63e6c2b6-4a8e-869c-3d4c-e38355226584/',
+  },
+  {
+    id: '55d8a0f4-4274-ca67-fe2c-06ab45efdf58',
+    name: 'Ares',
+    category: 'Heavy Weapons',
+    icon: 'https://media.valorant-api.com/weapons/55d8a0f4-4274-ca67-fe2c-06ab45efdf58/',
+  },
   {
     id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
     name: 'Odin',
@@ -57,23 +81,15 @@ export default function BuddiesPage() {
         <Typography variant="h3" color="blueTitle">
           Weapons
         </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={20} sm={6} md={3}>
-            <AppWidgetSummary name="Task Force 809 Buddy" icon="1" />
+        <div style={{ paddingTop: '40px' }}>
+          <Grid container spacing={8}>
+            {mock.map((arma) => (
+              <Grid item xs={20} sm={6} md={4} lg={3} key={`randomKey${arma.id}`}>
+                <WeaponWidgetSummary name={arma.name} image={arma.icon} category={arma.category} />
+              </Grid>
+            ))}
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="RGX 11z Pro Buddy" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Gaia's Vengeance Buddy" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Zedd Buddy" />
-          </Grid>
-        </Grid>
+        </div>
       </Container>
     </>
   );
