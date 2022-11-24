@@ -27,7 +27,7 @@ export default function NameDescriptionWidgetSummary({ name, description, color 
       }}
       {...other}
     >
-      <div style={{ display: 'grid', gridTemplateColumns: '0.3fr  1.7fr' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '0.5fr  1.5fr' }}>
         <div
           style={{ borderWidth: '0px 1px 0px 0px', borderStyle: 'solid', borderColor: '#73f9f9', paddingLeft: '50px' }}
         >
