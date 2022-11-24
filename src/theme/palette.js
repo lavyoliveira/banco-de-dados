@@ -46,6 +46,7 @@ const palette = {
   secondary: SECONDARY,
   info: INFO,
   grey: GREY,
+  blueTitle: '#22A7B8',
   divider: alpha(GREY[500], 0.24),
   text: {
     primary: '#A7A6A6',
