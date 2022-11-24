@@ -1,10 +1,49 @@
 import { Helmet } from 'react-helmet-async';
-import { Grid, Container, Typography } from '@mui/material';
-import {
-  AppWidgetSummary,
-} from '../sections/@dashboard/app';
+import { Grid, Container, Typography, InputLabel, FormGroup, FormControlLabel, Checkbox, NativeSelect, Button, FormLabel } from '@mui/material';
+import { useState , useEffect } from 'react';
+import { AppWidgetSummary } from '../sections/@dashboard/app';
 
-export default function BuddiesPage() {
+
+const urlApi = 'http://localhost:3333/';
+
+export default function Bundles() {
+  const [availableBundles, setAvailableBundles] = useState([]);
+  const [availableFields, setAvailableFields] = useState({
+    'bundles': ['id', 'name', 'description', 'icon'],
+  });
+  const [availableJoins, setAvailableJoins] = useState(['buddies', 'cards', 'skins', 'sprays', 'titles']);
+  const [availableJoinsFields, setAvailableJoinsFields] = useState({});
+  const [selectedFields, setSelectedFields] = useState({
+    'bundles': ['id', 'name', 'description', 'icon'],
+  });
+  const [selectedJoins, setSelectedJoins] = useState([]);
+
+  useEffect(() => {
+    fetch(`${urlApi  }bundles`)
+      .then(response => response.json())
+      .then(data => {
+        setAvailableBundles(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${urlApi  }info`)
+      .then(response => response.json())
+      .then(data => {
+        setAvailableFields({
+          'bundles': data.bundles,
+        });
+
+        Object.keys(data).forEach(key => {
+          if (availableJoins.indexOf(key) !== -1) {
+            setAvailableJoinsFields(prevState => ({
+              ...prevState,
+              [key]: data[key],
+            }));
+          }
+        });
+      });
+  }, []);
 
   return (
     <>
@@ -17,23 +56,33 @@ export default function BuddiesPage() {
           Bundles
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={20} sm={6} md={3}>
-            <AppWidgetSummary name="Task Force 809 Buddy" icon="1" />
-          </Grid> 
+        <Grid container spacing={3} sx={{ mb: 3 }}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="RGX 11z Pro Buddy" />
-          </Grid>
+            <InputLabel htmlFor="select-multiple-native">Selecionar Bundle</InputLabel>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Gaia's Vengeance Buddy" />
+            <NativeSelect
+              multiple
+              inputProps={{ id: 'select-multiple-native' }}
+              sx={{ width: '100%' }}
+            >
+              <option value="all" selected>Todos</option>
+              {availableBundles.map((bundle) => (
+                <option key={bundle.id} value={bundle.id}>
+                  {bundle.name}
+                </option>
+              ))}
+            </NativeSelect>
           </Grid>
-
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary name="Zedd Buddy" />
-          </Grid> 
+            <Button variant="contained" sx={{ width: '100%', mb: 3 }} onClick={() => {
+              console.log(selectedFields);
+              console.log(selectedJoins);
+            }}>Buscar</Button>
+          </Grid>
         </Grid>
       </Container>
     </>
   );
 }
+
+
