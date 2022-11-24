@@ -44,6 +44,7 @@ const typography = {
     fontSize: '64px',
     ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),
   },
+
   h4: {
     fontWeight: 400,
     lineHeight: '50px',
@@ -52,9 +53,13 @@ const typography = {
   },
   h5: {
     fontWeight: 700,
-    lineHeight: '40px',
-    fontSize: '40px',
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
+    lineHeight: '35px',
+    fontSize: '24px',
+  },
+  h5Regular: {
+    fontWeight: 400,
+    lineHeight: '35px',
+    fontSize: '24px',
   },
   h6: {
     fontWeight: 700,
