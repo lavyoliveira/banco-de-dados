@@ -1,3 +1,4 @@
+import { FileText } from 'phosphor-react';
 import SvgColor from '../../../components/svg-color';
 
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -34,14 +35,14 @@ const navConfig = [
     icon: icon('weapon'),
   },
   {
-    title: 'Content Tiers',
-    path: '/content-tiers',
+    title: 'Skins',
+    path: '/skins',
     icon: icon('diamond'),
   },
   {
-    title: 'Skins',
-    path: '/skins',
-    icon: icon('skin'),
+    title: 'Relatório',
+    path: '/reports',
+    icon: <FileText size={32} weight="thin" />
   },
 ];
 

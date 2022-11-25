@@ -27,7 +27,7 @@ export default function SkinsPage() {
     );
   }, []);
 
-  const handleBundleSelection = (selectedBundle, selectedWeapon) => {
+  const handleInfoSelection = (selectedBundle, selectedWeapon) => {
     let route = 'skins';
 
     if (selectedBundle !== '') {
@@ -37,8 +37,6 @@ export default function SkinsPage() {
     if (selectedWeapon !== '') {
       route += `/weapon/${selectedWeapon}`;
     }
-
-    console.log(route);
 
     apiServices.get(route)
       .then(data => {
@@ -54,7 +52,7 @@ export default function SkinsPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+      <Typography variant="h3" sx={{ mb: 5 }} color="blueTitle">
           Skins
         </Typography>
 
@@ -99,8 +97,8 @@ export default function SkinsPage() {
           </Grid>
           
           <Grid item xs={12} sm={6} md={3}>
-            <Button variant="contained" sx={{ width: '100%', mb: 3 }} onClick={() => {
-              handleBundleSelection(selectedBundles, selectedWeapons);
+          <Button variant="outlined" sx={{ width: '100%', mb: 3 }} onClick={() => {
+              handleInfoSelection(selectedBundles, selectedWeapons);
             }}>Buscar</Button>
           </Grid>
         </Grid>

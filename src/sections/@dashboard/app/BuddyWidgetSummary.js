@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Card, Typography } from '@mui/material';
 
-SprayWidgetSummary.propTypes = {
+BuddyWidgetSummary.propTypes = {
   color: PropTypes.string,
   name: PropTypes.string.isRequired,
   sx: PropTypes.object,
@@ -9,7 +9,7 @@ SprayWidgetSummary.propTypes = {
   theme: PropTypes.string,
 };
 
-export default function SprayWidgetSummary({ name, image, theme, color = 'primary', sx, ...other }) {
+export default function BuddyWidgetSummary({ name, image, theme, color = 'primary', sx, ...other }) {
   return (
     <Card
       sx={{
@@ -32,7 +32,7 @@ export default function SprayWidgetSummary({ name, image, theme, color = 'primar
     >
 
       <div style={{ display: 'grid', gridTemplateColumns: '150px 0.1fr auto' }}>
-        <img src={image} alt="imagem" style={{
+        <img src={`${image}`} alt="imagem" style={{
           width: '150px',
           height: '150px',
           margin: 'auto',

@@ -8,7 +8,7 @@ import NameDescriptionWidgetSummary from '../sections/@dashboard/app/NameDescrip
 export default function BuddiesPage() {
   const [availableTitles, setAvailableTitles] = useState([]);
   const [selectedTitle, setSelectedTitle] = useState(null);
-  const [titleInfo, setTitleInfo] = useState(null);
+  const [titleInfo, setTitleInfo] = useState([]);
 
   useEffect(() => {
     apiServices.get('titles')
@@ -41,7 +41,7 @@ export default function BuddiesPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h3" color="blueTitle">
+        <Typography variant="h3" sx={{ mb: 5 }} color="blueTitle">
           Player Titles
         </Typography>
 

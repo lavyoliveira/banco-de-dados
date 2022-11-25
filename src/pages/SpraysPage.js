@@ -1,29 +1,43 @@
 import { Helmet } from 'react-helmet-async';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography, Button, NativeSelect, InputLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { SprayWidgetSummary } from '../sections/@dashboard/app';
+import { apiServices } from '../services/apiServices';
 
-const mock = [
-  {
-      "id": "3d2bcfc5-442b-812e-3c08-9180d6b36077",
-      "id_bundle": "ed453815-44aa-4c4d-f3aa-77b4bcf048d7",
-      "name": "Caught on Camera Spray",
-      "category": "",
-      "theme": "Glitchpop",
-      "icon": "https://media.valorant-api.com/sprays/3d2bcfc5-442b-812e-3c08-9180d6b36077/",
-      "animation": ""
-  },
-  {
-      "id": "81c68821-46d3-9176-294c-abba0bc64e0b",
-      "id_bundle": "ed453815-44aa-4c4d-f3aa-77b4bcf048d7",
-      "name": "Chicken Out Spray",
-      "category": "",
-      "theme": "Glitchpop",
-      "icon": "https://media.valorant-api.com/sprays/81c68821-46d3-9176-294c-abba0bc64e0b/",
-      "animation": ""
-  }
-]
 
 export default function BuddiesPage() {
+  const [availableSprays, setAvailableSprays] = useState([]);
+  const [selectedSpray, setSelectedSpray] = useState(null);
+  const [sprayInfo, setSprayInfo] = useState([]);
+  const [imageType, setImageType] = useState('fulltransparenticon.png');
+
+  useEffect(() => {
+    apiServices.get('sprays')
+      .then(data => {
+        setAvailableSprays(data);
+      }
+      );
+  }, []);
+
+  const handleSpraySelection = (selectedSpray) => {
+    let route = 'sprays';
+    if (selectedSpray) {
+      route = `sprays/${selectedSpray}`;
+    }
+
+    apiServices.get(route)
+      .then(data => {
+        if (selectedSpray) {
+          setSprayInfo([data]);
+        } else {
+          setSprayInfo(data);
+        }
+      });
+  };
+
+  const handleChange = (event) => {
+    setImageType(event.target.value);
+  };
 
   return (
     <>
@@ -32,15 +46,57 @@ export default function BuddiesPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h3" sx={{ mb: 5 }} color="blueTitle">
           Sprays
         </Typography>
 
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={5}>
+            <InputLabel htmlFor="select-multiple-native">Selecionar Spray</InputLabel>
+
+            <NativeSelect
+              multiple
+              inputProps={{ id: 'select-multiple-native' }}
+              sx={{ width: '100%' }}
+              onChange={(event) => {
+                setSelectedSpray(event.target.value);
+              }}
+            >
+              <option value="" selected>Todos</option>
+              {availableSprays.map((spray) => (
+                <option key={spray.id} value={spray.id}>
+                  {spray.name}
+                </option>
+              ))}
+            </NativeSelect>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <Button variant="outlined" sx={{ width: '100%', mb: 3 }} onClick={() => {
+              handleSpraySelection(selectedSpray);
+            }}>Buscar</Button>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={5}>
+            <RadioGroup
+              aria-labelledby="demo-controlled-radio-buttons-group"
+              name="controlled-radio-buttons-group"
+              value={imageType}
+              onChange={handleChange}
+              row
+            >
+              <FormControlLabel value="fulltransparenticon.png" control={<Radio />} label="png" />
+              <FormControlLabel value="animation.gif" control={<Radio />} label="gif" />
+            </RadioGroup>
+          </Grid>
+        </Grid>
+
         <Grid container spacing={2}>
-        {mock.map((spray) => (
-          <Grid item xs={24} sm={12} md={6} key={`randomKey${spray.id}`}>
-            <SprayWidgetSummary name={spray.name} image={spray.icon} theme={spray.theme}/>
-          </Grid> 
+          {sprayInfo.map((spray) => (
+            <Grid item xs={24} sm={12} md={6} key={`randomKey${spray.id}`}>
+              <SprayWidgetSummary name={spray.name} image={spray.icon + imageType} theme={spray.theme} />
+            </Grid>
           ))}
         </Grid>
       </Container>
