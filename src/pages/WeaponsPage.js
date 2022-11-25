@@ -1,75 +1,38 @@
 import { Helmet } from 'react-helmet-async';
-import { Grid, Container, Typography } from '@mui/material';
-import WeaponWidgetSummary from '../sections/@dashboard/app/NameDescriptionWidgetSummary';
-
-const urlApi = 'http://localhost:3333/';
-
-const mock = [
-  {
-    id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
-    name: 'Odin',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/63e6c2b6-4a8e-869c-3d4c-e38355226584/',
-  },
-  {
-    id: '55d8a0f4-4274-ca67-fe2c-06ab45efdf58',
-    name: 'Ares',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/55d8a0f4-4274-ca67-fe2c-06ab45efdf58/',
-  },
-  {
-    id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
-    name: 'Odin',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/63e6c2b6-4a8e-869c-3d4c-e38355226584/',
-  },
-  {
-    id: '55d8a0f4-4274-ca67-fe2c-06ab45efdf58',
-    name: 'Ares',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/55d8a0f4-4274-ca67-fe2c-06ab45efdf58/',
-  },
-  {
-    id: '63e6c2b6-4a8e-869c-3d4c-e38355226584',
-    name: 'Odin',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/63e6c2b6-4a8e-869c-3d4c-e38355226584/',
-  },
-  {
-    id: '55d8a0f4-4274-ca67-fe2c-06ab45efdf58',
-    name: 'Ares',
-    category: 'Heavy Weapons',
-    icon: 'https://media.valorant-api.com/weapons/55d8a0f4-4274-ca67-fe2c-06ab45efdf58/',
-  },
-];
+import { Grid, Container, Typography, InputLabel, NativeSelect, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import WeaponWidgetSummary from '../sections/@dashboard/app/WeaponWidgetSummary';
+import { apiServices } from '../services/apiServices';
 
 export default function BuddiesPage() {
-  // useEffect(() => {
-  //   fetch(`${urlApi  }bundles`)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setAvailableBundles(data);
-  //     });
-  // }, []);
+  const [availableWeapons, setAvailableWeapons] = useState([]);
+  const [selectedWeapon, setSelectedWeapon] = useState(null);
+  const [weaponInfo, setWeaponInfo] = useState([]);
 
-  // useEffect(() => {
-  //   fetch(`${urlApi  }info`)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setAvailableFields({
-  //         'bundles': data.bundles,
-  //       });
+  useEffect(() => {
+    apiServices.get('weapons')
+      .then(data => {
+        setAvailableWeapons(data);
+      }
+      );
+  }, []);
 
-  //       Object.keys(data).forEach(key => {
-  //         if (availableJoins.indexOf(key) !== -1) {
-  //           setAvailableJoinsFields(prevState => ({
-  //             ...prevState,
-  //             [key]: data[key],
-  //           }));
-  //         }
-  //       });
-  //     });
-  // }, []);
+  const handleWeaponSelection = (selectedWeapon) => {
+    let route = 'weapons';
+    
+    if (selectedWeapon) {
+      route = `weapons/${selectedWeapon}`;
+    }
+
+    apiServices.get(route)
+      .then(data => {
+        if (selectedWeapon) {
+          setWeaponInfo([data]);
+        } else {
+          setWeaponInfo(data);
+        }
+      });
+  };
 
   return (
     <>
@@ -78,12 +41,40 @@ export default function BuddiesPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h3" color="blueTitle">
+      <Typography variant="h3" sx={{ mb: 5 }} color="blueTitle">
           Weapons
         </Typography>
+
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={5}>
+            <InputLabel htmlFor="select-multiple-native">Selecionar Weapon</InputLabel>
+
+            <NativeSelect
+              multiple
+              inputProps={{ id: 'select-multiple-native' }}
+              sx={{ width: '100%' }}
+              onChange={(event) => {
+                setSelectedWeapon(event.target.value);
+              }}
+            >
+              <option value="" selected>Todos</option>
+              {availableWeapons.map((weapon) => (
+                <option key={weapon.id} value={weapon.id}>
+                  {weapon.name}
+                </option>
+              ))}
+            </NativeSelect>
+          </Grid>
+          <Grid item xs={12} sm={6} md={2}>
+            <Button variant="outlined" sx={{ width: '100%', mb: 3 }} onClick={() => {
+              handleWeaponSelection(selectedWeapon);
+            }}>Buscar</Button>
+          </Grid>
+        </Grid>
+
         <div style={{ paddingTop: '40px' }}>
           <Grid container spacing={8}>
-            {mock.map((arma) => (
+            {weaponInfo.map((arma) => (
               <Grid item xs={20} sm={6} md={4} lg={3} key={`randomKey${arma.id}`}>
                 <WeaponWidgetSummary name={arma.name} image={arma.icon} category={arma.category} />
               </Grid>
