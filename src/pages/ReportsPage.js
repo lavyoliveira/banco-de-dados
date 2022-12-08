@@ -7,6 +7,11 @@ import { tables } from '../utils/reportsInfo';
 import { apiServices } from '../services/apiServices';
 
 
+Row.propTypes = {
+  row: Object,
+};
+
+
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
@@ -36,44 +41,42 @@ function Row(props) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               {
-                Object.keys(row.complement).map((key, index) => (
-                  <Typography key={index} variant="h6" gutterBottom component="div">
-                    {key}
-                  </Typography>
-                ))
-              }
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    {
-                      Object.keys(row.complement).map((key, index) => (
-                        row.complement[key].length > 0 &&  Object.keys((row.complement[key][0])).map((key2, index2) => (
-                          <TableCell key={index2} align="left">
-                            {key2}
-                          </TableCell>
-                        ))
-                      ))
-                    }
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {
-                    Object.keys(row.complement).map((key, index) => (
-                      row.complement[key].length > 0 && row.complement[key].map((row2, index2) => (
-                        <TableRow key={index2}>
+                row.complement && Object.keys(row.complement).map((key, index) => (
+                  <>
+                    <Typography key={index} variant="h6" gutterBottom component="div">
+                      {key}
+                    </Typography>
+                    <Table size="small" aria-label="purchases" key={index}>
+                      <TableHead>
+                        <TableRow>
                           {
-                            Object.keys(row2).map((key2, index3) => (
-                              <TableCell key={index3} align="left">
-                                {row2[key2]}
+                            row.complement[key] && row.complement[key].length > 0 && Object.keys(row.complement[key][0]).map((key2, index2) => (
+                              <TableCell key={index2} align="left">
+                                {key2}
                               </TableCell>
                             ))
                           }
                         </TableRow>
-                      ))
-                    ))
-                  }
-                </TableBody>
-              </Table>
+                      </TableHead>
+                      <TableBody>
+                        {
+                          row.complement[key] && row.complement[key].length > 0 && row.complement[key].map((row2, index2) => (
+                            <TableRow key={index2}>
+                              {
+                                Object.keys(row2).map((key2, index3) => (
+                                  <TableCell key={index3} align="left">
+                                    {row2[key2]}
+                                  </TableCell>
+                                ))
+                              }
+                            </TableRow>
+                          ))
+                        }
+                      </TableBody>
+                    </Table>
+                  </>
+                ))
+              }
             </Box>
           </Collapse>
         </TableCell>
@@ -86,38 +89,16 @@ export default function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState(null);
   const [selectedConnection, setSelectedConnection] = useState([]);
   const [selectedFields, setSelectedFields] = useState([]);
-
   const [finalQuery, setFinalQuery] = useState({});
   const [finalInfo, setFinalInfo] = useState(null);
 
-  const handleReportSelection = (selectedReport) => {
-    setSelectedReport(selectedReport);
-  };
-
   const getReport = () => {
-    const route = 'http://localhost:3333/reports';
-    const method = 'POST';
+    setFinalInfo(null);
 
-    const body = JSON.stringify(finalQuery);
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-
-    const options = {
-      method,
-      headers,
-      body
-    };
-
-    fetch(route, options)
-      .then(response => response.json())
-      .then((data) => {
-        console.log(data);
-        setFinalInfo(data);
-      })
-      .catch(error => console.log(error));
+    apiServices.post('reports', finalQuery).then((data) => {
+      console.log(data[0]);
+      setFinalInfo(data);
+    }).catch(error => console.log(error));
   };
 
   return (
@@ -142,6 +123,7 @@ export default function ReportsPage() {
               onChange={(event) => {
                 setSelectedReport(parseInt(event.target.value, 10));
                 setSelectedConnection([]);
+                setFinalInfo(null);
 
                 const order = {};
 
@@ -179,6 +161,7 @@ export default function ReportsPage() {
                         onChange={(event) => {
                           if (event.target.checked) {
                             setSelectedConnection([...selectedConnection, connection]);
+                            setFinalInfo(null);
 
                             const fields = [];
 
@@ -250,8 +233,9 @@ export default function ReportsPage() {
                           ) || (
                             <FormControlLabel control={<Checkbox />} label={field.name} key={field.name}
                               onChange={(event) => {
-                                if (event.target.checked) {
+                                console.log(event.target);
 
+                                if (event.target.checked) {
                                   setFinalQuery({
                                     ...finalQuery,
                                     secondaryTables: finalQuery.secondaryTables.map((item) => {
@@ -276,12 +260,18 @@ export default function ReportsPage() {
                                     ...finalQuery,
                                     secondaryTables: finalQuery.secondaryTables.map((item) => {
                                       if (item.table === tables.find((table) => table.id === connection).route) {
+                                        const newSelectedFields = selectedFields.filter((item) => item.connection !== connection);
+
+                                        setSelectedFields(newSelectedFields);
+
                                         return {
                                           ...item,
-                                          fields: item.fields.filter((item) => item !== field.name),
-                                          order: Object.keys(item.order).filter((item) => item !== field.name).reduce((obj, key) => {
-                                            obj[key] = item.order[key];
-                                            return obj;
+                                          fields: item.fields.filter((item) => item.name !== field.name),
+                                          order: Object.keys(item.order).reduce((acc, key) => {
+                                            if (key !== field.name) {
+                                              acc[key] = item.order[key];
+                                            }
+                                            return acc;
                                           }, {}),
                                         };
                                       }
@@ -359,21 +349,23 @@ export default function ReportsPage() {
         finalInfo && (
           <Container maxWidth="xl">
             <TableContainer component={Paper}>
-              <Table aria-label="collapsible table">
+              <Table aria-label="collapsible table" style={{ background: '#161616' }}>
                 <TableHead>
                   <TableRow>
                     <TableCell />
                     {
-                      Object.keys(finalInfo[0]).map((key) => (
+                      finalInfo.length > 0 && Object.keys(finalInfo[0]).map((key) => (
                         <TableCell key={key}>{key}</TableCell>
                       ))
                     }
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {finalInfo.map((row) => (
-                    <Row key={row.name} row={row} />
-                  ))}
+                  {
+                    finalInfo.length > 0 && finalInfo.map((row) => (
+                      <Row key={row.name} row={row} />
+                    ))
+                  }
                 </TableBody>
               </Table>
             </TableContainer>
